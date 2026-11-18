@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Store Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg-main: #0e1114;
+      --bg-card: #161a1f;
+      --bg-pill: #1c2127;
+      --bg-nav: #13171b;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --text-primary: #f3f4f6;
+      --text-secondary: #9ca3af;
+      --accent-gold: #e6c875;
+      --badge-red: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding-bottom: 84px;
+      overflow-x: hidden;
+    }
+
+    /* --- HEADER --- */
+    .store-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px 14px;
+    }
+
+    .brand-left h1 {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      line-height: 1.1;
+    }
+
+    .brand-left span {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--accent-gold);
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    .brand-logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      object-fit: cover;
+      background: #1c2127;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-right {
+      text-align: right;
+    }
+
+    .brand-right strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .brand-right span {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* --- CATEGORIE (PILLS) --- */
+    .categories-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px 16px 14px;
+      scrollbar-width: none;
+    }
+    .categories-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-pill {
+      background: var(--bg-pill);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .cat-pill.active {
+      background: #e5e7eb;
+      color: #0e1114;
+      border-color: #e5e7eb;
+    }
+
+    /* --- GRIGLIA PRODOTTI --- */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 4px 16px 20px;
+    }
+
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .product-card:active {
+      transform: scale(0.98);
+    }
+
+    .media-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1.05;
+      background: #111418;
+      overflow: hidden;
+    }
+
+    .media-wrapper img,
+    .media-wrapper video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-card.out-of-stock .media-wrapper img,
+    .product-card.out-of-stock .media-wrapper video {
+      opacity: 0.35;
+      filter: grayscale(40%);
+    }
+
+    .cat-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(14, 17, 20, 0.78);
+      backdrop-filter: blur(6px);
+      color: var(--accent-gold);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid rgba(230, 200, 117, 0.25);
+    }
+
+    .card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .stock-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--badge-red);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .product-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .product-card.out-of-stock .product-title {
+      color: var(--text-secondary);
+    }
+
+    .product-price {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 12.5px;
+      color: var(--accent-gold);
+      margin-top: auto;
+      padding-top: 2px;
+    }
+
+    .product-card.out-of-stock .product-price {
+      opacity: 0.7;
+    }
+
+    /* --- SEZIONI SECONDARIE (T.o.S, Carrello, Recensioni, Contatti) --- */
+    .tab-section {
+      display: none;
+      padding: 10px 16px 24px;
+    }
+    .tab-section.active {
+      display: block;
+    }
+
+    .info-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 12px;
+    }
+
+    .info-box h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: var(--accent-gold);
+    }
+
+    .info-box p, .info-box li {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text-secondary);
+    }
+
+    .info-box ul {
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* --- CARRELLO --- */
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: var(--accent-gold);
+      color: #0e1114;
+      border: none;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* --- MODALE DETTAGLIO PRODOTTO --- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: flex-end;
+      z-index: 100;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: var(--bg-card);
+      width: 100%;
+      max-height: 88vh;
+      border-radius: 22px 22px 0 0;
+      overflow-y: auto;
+      padding: 18px;
+      border-top: 1px solid var(--border-subtle);
+      animation: slideUp 0.22s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-media {
+      width: 100%;
+      max-height: 300px;
+      border-radius: 14px;
+      object-fit: cover;
+      background: #0e1114;
+      margin-bottom: 14px;
+    }
+
+    /* --- BOTTOM NAVIGATION --- */
+    .bottom-nav {
+      position: fixed;
+      bottom: 10px;
+      left: 12px;
+      right: 12px;
+      background: var(--bg-nav);
+      border: 1px solid var(--border-subtle);
+      border-radius: 999px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 6px;
+      z-index: 50;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .nav-btn.active {
+      background: #232931;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="store-header">
+    <div class="brand-left">
+      <h1 id="cfg-brand-title">Python</h1>
+      <span id="cfg-brand-sub">ITA</span>
+    </div>
+    <img id="cfg-logo" class="brand-logo" src="" alt="Logo" />
+    <div class="brand-right">
+      <strong id="cfg-ship-title">Worldwide</strong>
+      <span id="cfg-ship-sub">SHIPPING</span>
+    </div>
+  </header>
+
+  <!-- TAB 1: HOME (CATALOGO) -->
+  <main id="tab-home" class="tab-section active" style="padding: 0;">
+    <div class="categories-bar" id="categories-bar"></div>
+    <div class="products-grid" id="products-grid"></div>
+  </main>
+
+  <!-- TAB 2: T.o.S -->
+  <section id="tab-tos" class="tab-section">
+    <div class="info-box">
+      <h2>Termini di Servizio (T.o.S)</h2>
+      <ul id="tos-list"></ul>
+    </div>
+  </section>
+
+  <!-- TAB 3: CARRELLO -->
+  <section id="tab-cart" class="tab-section">
+    <div class="info-box">
+      <h2>Il tuo Carrello</h2>
+      <div id="cart-items"></div>
+      <div id="cart-total" style="margin-top: 12px; font-weight: 700; color: var(--accent-gold);"></div>
+      <button id="checkout-btn" class="btn-primary" onclick="sendOrderToBot()">Invia Ordine su Telegram</button>
+    </div>
+  </section>
+
+  <!-- TAB 4: RECENSIONI -->
+  <section id="tab-reviews" class="tab-section">
+    <div id="reviews-container"></div>
+  </section>
+
+  <!-- TAB 5: CONTATTI -->
+  <section id="tab-contacts" class="tab-section">
+    <div class="info-box">
+      <h2>Contatti Ufficiali</h2>
+      <p id="contacts-text" style="margin-bottom: 14px;"></p>
+      <button class="btn-primary" onclick="openSupport()">Contatta Operatore</button>
+    </div>
+  </section>
+
+  <!-- MODALE PRODOTTO -->
+  <div class="modal-overlay" id="product-modal" onclick="closeModal(event)">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <div id="modal-media-container"></div>
+      <span id="modal-cat" class="cat-badge" style="position: static; display: inline-block; margin-bottom: 8px;"></span>
+      <h2 id="modal-title" style="font-size: 18px; margin-bottom: 6px;"></h2>
+      <p id="modal-price" class="product-price" style="font-size: 15px; margin-bottom: 12px;"></p>
+      <p id="modal-desc" style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 16px;"></p>
+      <button id="modal-add-btn" class="btn-primary">Aggiungi al Carrello</button>
+      <button class="btn-primary" style="background: #232931; color: #fff; margin-top: 8px;" onclick="closeModal()">Chiudi</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('home', this)">Home</button>
+    <button class="nav-btn" onclick="switchTab('tos', this)">T.o.S</button>
+    <button class="nav-btn" onclick="switchTab('cart', this)" id="nav-cart-btn">Carrello</button>
+    <button class="nav-btn" onclick="switchTab('reviews', this)">Recensioni</button>
+    <button class="nav-btn" onclick="switchTab('contacts', this)">Contatti</button>
+  </nav>
+
+  <script>
+    // =========================================================================
+    // 🔥 CONFIGURAZIONE PERSONALIZZABILE (MODIFICA SOLO QUI NOMI, PREZZI E VIDEO)
+    // =========================================================================
+    const CONFIG = {
+      brandTitle: "Python",
+      brandSub: "ITA",
+      shipTitle: "Worldwide",
+      shipSub: "SHIPPING",
+      logoUrl: "https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg", // Sostituisci con il tuo logo (es. "media/logo.png")
+      supportUsername: "TuoUsernameTelegram", // Senza @
+
+      categories: ["Tutti", "CAT 1", "CAT 2", "CAT 3", "CAT 4"],
+
+      products: [
+        {
+          id: 1,
+          title: 'PRODOTTO DEMO "ALPHA" 1GR',
+          category: "CAT 1",
+          price: 40,
+          priceLabel: "A partire da €40",
+          inStock: true,
+          mediaType: "image", // Usa "video" per file .mp4 oppure "image" per .jpg/.png
+          mediaUrl: "https://via.placeholder.com/400x420/161a1f/e6c875?text=VIDEO+1",
+          description: "Descrizione completa del primo articolo. Puoi inserire qui tutte le specifiche."
+        },
+        {
+          id: 2,
+          title: "PRODOTTO DEMO BETA 2026",
+          category: "CAT 2",
+          price: 120,
+          priceLabel: "A partire da €120",
+          inStock: false, // Metti false per mostrare il badge rosso "OUT OF STOCK"
+          mediaType: "image",
+          mediaUrl: "https://via.placeholder.com/400x420/161a1f/e6c875?text=VIDEO+2",
+          description: "Articolo attualmente esaurito. Tornerà disponibile a breve."
+        },
+        {
+          id: 3,
+          title: "PRODOTTO DEMO GAMMA",
+          category: "CAT 3",
+          price: 65,
+          priceLabel: "A partire da €65",
+          inStock: false,
+          mediaType: "image",
+          mediaUrl: "https://via.placeholder.com/400x420/161a1f/e6c875?text=VIDEO+3",
+          description: "Descrizione del terzo articolo."
+        },
+        {
+          id: 4,
+          title: "PRODOTTO DEMO DELTA",
+          category: "CAT 3",
+          price: 80,
+          priceLabel: "A partire da €80",
+          inStock: false,
+          mediaType: "image",
+          mediaUrl: "https://via.placeholder.com/400x420/161a1f/e6c875?text=VIDEO+4",
+          description: "Descrizione del quarto articolo."
+        }
+      ],
+
+      tos: [
+        "Spedizioni tracciate in 24/48h lavorative.",
+        "Verifica sempre l'indirizzo prima di confermare l'ordine.",
+        "Per assistenza usa esclusivamente il pulsante nella sezione Contatti."
+      ],
+
+      reviews: [
+        { user: "@Cliente_01", stars: "⭐⭐⭐⭐⭐", text: "Servizio rapidissimo e qualità top." },
+        { user: "@Cliente_02", stars: "⭐⭐⭐⭐⭐", text: "Tutto perfetto come da descrizione." }
+      ],
+
+      contactsText: "Hai domande su un prodotto o vuoi finalizzare un ordine personalizzato? Scrivici direttamente su Telegram."
+    };
+
+    // =========================================================================
+    // LOGICA APPLICAZIONE (NON SERVE TOCCARE NULLA QUI SOTTO)
+    // =========================================================================
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      tg.setHeaderColor("#0e1114");
+      tg.setBackgroundColor("#0e1114");
+    }
+
+    let currentCategory = "Tutti";
+    let cart = [];
+
+    function initApp() {
+      document.getElementById("cfg-brand-title").textContent = CONFIG.brandTitle;
+      document.getElementById("cfg-brand-sub").textContent = CONFIG.brandSub;
+      document.getElementById("cfg-ship-title").textContent = CONFIG.shipTitle;
+      document.getElementById("cfg-ship-sub").textContent = CONFIG.shipSub;
+      document.getElementById("cfg-logo").src = CONFIG.logoUrl;
+      document.getElementById("contacts-text").textContent = CONFIG.contactsText;
+
+      // Render T.o.S
+      document.getElementById("tos-list").innerHTML = CONFIG.tos.map(t => `<li>${t}</li>`).join("");
+
+      // Render Recensioni
+      document.getElementById("reviews-container").innerHTML = CONFIG.reviews.map(r => `
+        <div class="info-box">
+          <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+            <strong style="font-size:13.5px;">${r.user}</strong>
+            <span>${r.stars}</span>
+          </div>
+          <p>${r.text}</p>
+        </div>
+      `).join("");
+
+      renderCategories();
+      renderProducts();
+      renderCart();
+    }
+
+    function renderCategories() {
+      const bar = document.getElementById("categories-bar");
+      bar.innerHTML = CONFIG.categories.map(cat => `
+        <button class="cat-pill ${cat === currentCategory ? 'active' : ''}" onclick="selectCategory('${cat}')">
+          ${cat}
+        </button>
+      `).join("");
+    }
+
+    function selectCategory(cat) {
+      currentCategory = cat;
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById("products-grid");
+      const filtered = currentCategory === "Tutti"
+        ? CONFIG.products
+        : CONFIG.products.filter(p => p.category === currentCategory);
+
+      grid.innerHTML = filtered.map(p => {
+        const mediaTag = p.mediaType === "video"
+          ? `<video src="${p.mediaUrl}" autoplay loop muted playsinline></video>`
+          : `<img src="${p.mediaUrl}" alt="${p.title}" loading="lazy" />`;
+
+        return `
+          <div class="product-card ${p.inStock ? '' : 'out-of-stock'}" onclick="openProduct(${p.id})">
+            <div class="media-wrapper">
+              ${mediaTag}
+              <span class="cat-badge">${p.category}</span>
+            </div>
+            <div class="card-body">
+              ${p.inStock ? '' : '<span class="stock-badge">OUT OF STOCK</span>'}
+              <div class="product-title">${p.title}</div>
+              <div class="product-price">${p.priceLabel}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function openProduct(id) {
+      const p = CONFIG.products.find(x => x.id === id);
+      if (!p) return;
+
+      const mediaContainer = document.getElementById("modal-media-container");
+      mediaContainer.innerHTML = p.mediaType === "video"
+        ? `<video class="modal-media" src="${p.mediaUrl}" autoplay loop muted playsinline controls></video>`
+        : `<img class="modal-media" src="${p.mediaUrl}" alt="${p.title}" />`;
+
+      document.getElementById("modal-cat").textContent = p.category;
+      document.getElementById("modal-title").textContent = p.title;
+      document.getElementById("modal-price").textContent = p.priceLabel;
+      document.getElementById("modal-desc").textContent = p.description;
+
+      const addBtn = document.getElementById("modal-add-btn");
+      if (p.inStock) {
+        addBtn.disabled = false;
+        addBtn.textContent = `Aggiungi al Carrello (€${p.price})`;
+        addBtn.onclick = () => {
+          addToCart(p);
+          closeModal();
+        };
+      } else {
+        addBtn.disabled = true;
+        addBtn.textContent = "Prodotto Esaurito";
+      }
+
+      document.getElementById("product-modal").classList.add("open");
+    }
+
+    function closeModal(e) {
+      if (!e || e.target.id === "product-modal") {
+        document.getElementById("product-modal").classList.remove("open");
+      }
+    }
+
+    function addToCart(product) {
+      cart.push(product);
+      renderCart();
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred("success");
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById("cart-items");
+      const totalEl = document.getElementById("cart-total");
+      const btn = document.getElementById("checkout-btn");
+      const navBtn = document.getElementById("nav-cart-btn");
+
+      navBtn.textContent = cart.length > 0 ? `Carrello (${cart.length})` : "Carrello";
+
+      if (cart.length === 0) {
+        container.innerHTML = `<p>Il carrello è vuoto.</p>`;
+        totalEl.textContent = "";
+        btn.disabled = true;
+        return;
+      }
+
+      container.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <div>
+            <div style="font-size:13px; font-weight:700;">${item.title}</div>
+            <div style="font-size:12px; color:var(--accent-gold);">€${item.price}</div>
+          </div>
+          <button onclick="removeFromCart(${idx})" style="background:none; border:none; color:#ef4444; font-weight:700; cursor:pointer;">Rimuovi</button>
+        </div>
+      `).join("");
+
+      const sum = cart.reduce((acc, item) => acc + item.price, 0);
+      totalEl.textContent = `Totale stimato: €${sum}`;
+      btn.disabled = false;
+    }
+
+    function sendOrderToBot() {
+      if (cart.length === 0) return;
+      const summary = cart.map(i => `- ${i.title} (€${i.price})`).join("\n");
+      const total = cart.reduce((acc, i) => acc + i.price, 0);
+      const msg = encodeURIComponent(`Ciao! Vorrei ordinare:\n${summary}\n\nTotale: €${total}`);
+
+      if (tg) {
+        tg.openTelegramLink(`https://t.me/${CONFIG.supportUsername}?text=${msg}`);
+      } else {
+        window.open(`https://t.me/${CONFIG.supportUsername}?text=${msg}`, "_blank");
+      }
+    }
+
+    function openSupport() {
+      const url = `https://t.me/${CONFIG.supportUsername}`;
+      if (tg) tg.openTelegramLink(url);
+      else window.open(url, "_blank");
+    }
+
+    function switchTab(tabName, btnEl) {
+      document.querySelectorAll(".tab-section").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
+      document.getElementById(`tab-${tabName}`).classList.add("active");
+      btnEl.classList.add("active");
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
+
