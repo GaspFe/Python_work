@@ -33,20 +33,22 @@
     html, body {
       min-height: 100%;
       background-color: var(--bg-outer);
+      background-image: url("python_logo.jpg");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
       color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
       line-height: 1.45;
     }
 
-    /* Sfondo desktop d'atmosfera */
+    /* Overlay scuro e sfocato sopra lo sfondo */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(circle at 20% 15%, rgba(59, 130, 246, 0.14), transparent 45%),
-        radial-gradient(circle at 80% 75%, rgba(234, 179, 8, 0.08), transparent 45%),
-        linear-gradient(180deg, rgba(11, 13, 16, 0.85), rgba(11, 13, 16, 0.96));
+      background: rgba(11, 13, 16, 0.78);
+      backdrop-filter: blur(4px);
       pointer-events: none;
       z-index: 0;
     }
@@ -109,16 +111,21 @@
     }
 
     .brand-logo {
-      width: 44px;
-      height: 44px;
+      width: 46px;
+      height: 46px;
       border-radius: 50%;
       background: var(--bg-card-2);
       border: 2px solid rgba(255, 255, 255, 0.14);
       display: grid;
       place-items: center;
-      font-weight: 800;
-      font-size: 18px;
       overflow: hidden;
+    }
+
+    .brand-logo video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .brand-title {
@@ -529,7 +536,7 @@
       cursor: pointer;
     }
 
-    /* Bottom Navigation (senza Carrello) */
+    /* Bottom Navigation */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -668,11 +675,13 @@
 </head>
 <body>
   <div class="app-shell">
-    <!-- Topbar -->
+    <!-- Topbar con logo video python_gif.mov -->
     <header class="topbar">
       <div class="topbar-side">24/7 Active</div>
       <div class="topbar-brand">
-        <div class="brand-logo" id="headerLogo">🐍</div>
+        <div class="brand-logo" id="headerLogo">
+          <video src="python_gif.mov" autoplay loop muted playsinline preload="auto"></video>
+        </div>
         <div class="brand-title">Python ITA</div>
         <div class="brand-sub">Tracked Shipping</div>
       </div>
@@ -741,7 +750,7 @@
         <div class="rating-big">
           <div class="rating-score" id="avgRating">5.0</div>
           <div class="rating-stars">★★★★★</div>
-          <div class="rating-count" id="totalReviewsLabel">3 recensioni</div>
+          <div class="rating-count" id="totalReviewsLabel">11 recensioni</div>
         </div>
         <div class="rating-bars" id="ratingBars"></div>
       </div>
@@ -809,9 +818,12 @@
       <div>
         <label for="revProduct">Prodotto</label>
         <select id="revProduct">
+          <option value="Frozen">Frozen</option>
+          <option value="Dry">Dry</option>
           <option value="Apple fritter">Apple fritter</option>
           <option value="Gummy bearz">Gummy bearz</option>
           <option value="Purple gelato">Purple gelato</option>
+          <option value="Svapo">Svapo</option>
         </select>
       </div>
       <div>
@@ -843,7 +855,6 @@
       window.Telegram.WebApp.expand();
     }
 
-    // Prodotti di esempio con supporto video (sostituisci i percorsi src con i tuoi file .mp4 / .jpg)
     const PRODUCTS = [
       {
         id: 1,
@@ -905,25 +916,78 @@
     ];
 
     const REVIEWS = [
+      // 2 su Frozen
       {
-        author: "@client_it",
+        author: "@marco_r",
         stars: 5,
-        products: ["Apple fritter"],
-        text: "Qualità top, aroma deciso e spedizione tracciata puntuale come indicato.",
+        products: ["Frozen"],
+        text: "Frozen super fresco e profumato, consistenza top e spedizione puntuale.",
         date: "Nov 2026"
       },
       {
         author: "Anonimo",
         stars: 5,
-        products: ["Gummy bearz"],
-        text: "Pacco curato nei dettagli, tutto conforme e comunicazione rapidissima.",
+        products: ["Frozen"],
+        text: "Qualità davvero alta su Frozen, imballo curato e zero intoppi.",
+        date: "Nov 2026"
+      },
+      // 4 su Dry
+      {
+        author: "@luke_99",
+        stars: 5,
+        products: ["Dry"],
+        text: "Dry lavorato benissimo, si sbriciola facile e rende alla grande.",
+        date: "Nov 2026"
+      },
+      {
+        author: "@samu_v",
+        stars: 5,
+        products: ["Dry"],
+        text: "Secondo ordine sul Dry, sempre costante e con un profilo pulito.",
+        date: "Nov 2026"
+      },
+      {
+        author: "Anonimo",
+        stars: 5,
+        products: ["Dry"],
+        text: "Ottimo rapporto qualità/prezzo sul Dry, arrivato nei tempi previsti.",
+        date: "Nov 2026"
+      },
+      {
+        author: "@davide_t",
+        stars: 5,
+        products: ["Dry"],
+        text: "Dry solido e ben conservato, esperienza super positiva.",
+        date: "Nov 2026"
+      },
+      // 2 sugli strain di prima
+      {
+        author: "@client_it",
+        stars: 5,
+        products: ["Apple fritter", "Gummy bearz"],
+        text: "Apple fritter e Gummy bearz entrambi top, profumi intensi e resa ottima.",
         date: "Nov 2026"
       },
       {
         author: "@buyer_eu",
         stars: 5,
         products: ["Purple gelato"],
-        text: "Colore e profilo ottimi, servizio affidabile dall'inizio alla consegna.",
+        text: "Purple gelato davvero notevole, estetica e sapore al top.",
+        date: "Nov 2026"
+      },
+      // 2 sulle svapo
+      {
+        author: "@giulia_s",
+        stars: 5,
+        products: ["Svapo"],
+        text: "Svapo comoda e compatta, tiro fluido e sapore deciso fino alla fine.",
+        date: "Nov 2026"
+      },
+      {
+        author: "Anonimo",
+        stars: 5,
+        products: ["Svapo"],
+        text: "Presa una svapo per comodità, zero perdite e ottima durata.",
         date: "Nov 2026"
       }
     ];
