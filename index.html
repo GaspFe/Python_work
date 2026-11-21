@@ -905,33 +905,30 @@
       },
       {
         id: 4,
-        title: "Apple fritter — Clip",
+        title: "WD1 — Video",
         category: "video",
         badge: "VIDEO",
-        price: "Clip HD",
+        price: "Clip",
         mediaType: "video",
-        src: "media/apple_fritter.mp4",
-        poster: "https://placehold.co/600x450/181c24/93c5fd?text=Video+Apple+fritter"
+        src: "new_APP_media/wd1.mov"
       },
       {
         id: 5,
-        title: "Gummy bearz — Clip",
+        title: "WD2 — Video",
         category: "video",
         badge: "VIDEO",
-        price: "Clip HD",
+        price: "Clip",
         mediaType: "video",
-        src: "media/gummy_bearz.mp4",
-        poster: "https://placehold.co/600x450/181c24/93c5fd?text=Video+Gummy+bearz"
+        src: "new_APP_media/wd2.mov"
       },
       {
         id: 6,
-        title: "Purple gelato — Clip",
+        title: "WD3 — Video",
         category: "video",
         badge: "VIDEO",
-        price: "Clip HD",
+        price: "Clip",
         mediaType: "video",
-        src: "media/purple_gelato.mp4",
-        poster: "https://placehold.co/600x450/181c24/93c5fd?text=Video+Purple+gelato"
+        src: "new_APP_media/wd3.mov"
       }
     ];
 
@@ -1029,7 +1026,7 @@
       const list = filter === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.category === filter);
       productsGrid.innerHTML = list.map((item) => {
         const mediaHtml = item.mediaType === "video"
-          ? `<video src="${item.src}" poster="${item.poster || ""}" controls muted playsinline preload="metadata"></video>`
+          ? `<video src="${item.src}" ${item.poster ? `poster="${item.poster}"` : ""} controls muted playsinline preload="metadata"></video>`
           : `<img src="${item.src}" alt="${item.title}" loading="lazy" />`;
 
         return `
