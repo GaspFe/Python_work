@@ -14,7 +14,7 @@
       --text-muted: #9aa3b2;
       --accent: #3b82f6;
       --accent-green-bg: rgba(22, 163, 74, 0.24);
-      --danger-bg: rgba(239, 68, 68, 0.20);
+      --danger-bg: rgba(239, 68, 68, 0.22);
       --border: rgba(255, 255, 255, 0.12);
       --radius-lg: 16px;
       --radius-md: 12px;
@@ -36,7 +36,7 @@
       line-height: 1.45;
     }
 
-    /* Sfondo python_logo.jpg fisso su PC e telefono, centrato sopra al centro */
+    /* Sfondo python_logo.jpg fisso su PC e telefono */
     .bg-fixed {
       position: fixed;
       inset: 0;
@@ -169,7 +169,7 @@
       font-weight: 800;
     }
 
-    /* Viste indipendenti (una sola attiva alla volta) */
+    /* Viste indipendenti */
     .view {
       display: none;
       padding: 10px 16px 20px;
@@ -241,6 +241,10 @@
       border-color: rgba(255, 255, 255, 0.26);
     }
 
+    .product-card.oos {
+      opacity: 0.78;
+    }
+
     .media-box {
       position: relative;
       width: 100%;
@@ -249,7 +253,6 @@
       overflow: hidden;
     }
 
-    .media-box img,
     .media-box video {
       width: 100%;
       height: 100%;
@@ -264,6 +267,20 @@
       left: 8px;
       background: rgba(11, 13, 16, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .oos-ribbon {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(220, 38, 38, 0.90);
       color: #ffffff;
       font-size: 9px;
       font-weight: 800;
@@ -294,7 +311,11 @@
       margin-top: auto;
     }
 
-    /* Vista dedicata Dettaglio Prodotto/Video (niente sovrapposizione su Home) */
+    .product-price.oos-text {
+      color: #fca5a5;
+    }
+
+    /* Vista dedicata Dettaglio Prodotto/Video */
     .detail-top-bar {
       display: flex;
       align-items: center;
@@ -348,14 +369,28 @@
 
     .detail-badges {
       display: flex;
+      align-items: center;
       gap: 8px;
       margin-bottom: 8px;
+      flex-wrap: wrap;
     }
 
     .detail-cat-badge {
       background: rgba(37, 99, 235, 0.24);
       border: 1px solid rgba(59, 130, 246, 0.42);
       color: #93c5fd;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+    }
+
+    .detail-oos-badge {
+      background: rgba(239, 68, 68, 0.22);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      color: #fca5a5;
       font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
@@ -655,11 +690,27 @@
       text-transform: uppercase;
       letter-spacing: 0.6px;
       cursor: pointer;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .btn-primary:hover {
       background: #1d4ed8;
+    }
+
+    .verified-notice {
+      display: none;
+      padding: 11px 13px;
+      border-radius: var(--radius-md);
+      background: rgba(234, 179, 8, 0.12);
+      border: 1px solid rgba(234, 179, 8, 0.45);
+      color: #facc15;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .verified-notice.show {
+      display: block;
     }
 
     .review-card {
@@ -806,77 +857,6 @@
       background: rgba(255, 255, 255, 0.10);
     }
 
-    /* Modale Nuova Recensione */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      background: rgba(0, 0, 0, 0.75);
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal {
-      width: 100%;
-      max-width: 420px;
-      background: #161b24;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .modal h3 {
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .modal label {
-      font-size: 11px;
-      color: var(--text-muted);
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .modal input,
-    .modal select,
-    .modal textarea {
-      width: 100%;
-      padding: 9px 10px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: #0f131a;
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 12px;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 4px;
-    }
-
-    .btn-secondary {
-      padding: 9px 14px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
     .toast {
       position: fixed;
       bottom: 76px;
@@ -928,7 +908,7 @@
       <div class="grid-2" id="productsGrid"></div>
     </section>
 
-    <!-- SCHEDA DEDICATA PRODOTTO / VIDEO (sostituisce la Home, niente finestra sopra) -->
+    <!-- SCHEDA DEDICATA PRODOTTO / VIDEO -->
     <section id="view-detail" class="view">
       <div class="detail-top-bar">
         <button class="back-circle-btn" id="closeDetailBtn" title="Torna alla Home">←</button>
@@ -940,51 +920,16 @@
 
       <div class="detail-badges">
         <span class="detail-cat-badge" id="detailBadge">WEED</span>
+        <span class="detail-oos-badge" id="detailOosBadge" style="display:none;">OUT OF STOCK</span>
       </div>
 
-      <div class="detail-title" id="detailTitle">WD1</div>
-      <div class="detail-from">Prezzo: <strong>A partire da €80</strong></div>
+      <div class="detail-title" id="detailTitle">TROPICANA CHERRY</div>
+      <div class="detail-from" id="detailFrom">Prezzo: <strong>A partire da €80</strong></div>
       <div class="detail-desc" id="detailDesc">Terpene fresco e intenso</div>
 
       <div class="shipping-banner">🇮🇹 SPEDIZIONE DA ITALIA</div>
 
-      <div class="qty-list" id="qtyList">
-        <div class="qty-row selected" data-qty="10g" data-price="€80">
-          <span class="qty-grammi">10g</span>
-          <div class="qty-right">
-            <span class="qty-prezzo">€80 <span>(8€/g)</span></span>
-            <span class="qty-plus">+</span>
-          </div>
-        </div>
-        <div class="qty-row" data-qty="25g" data-price="€150">
-          <span class="qty-grammi">25g</span>
-          <div class="qty-right">
-            <span class="qty-prezzo">€150 <span>(6€/g)</span></span>
-            <span class="qty-plus">+</span>
-          </div>
-        </div>
-        <div class="qty-row" data-qty="50g" data-price="€280">
-          <span class="qty-grammi">50g</span>
-          <div class="qty-right">
-            <span class="qty-prezzo">€280 <span>(5,6€/g)</span></span>
-            <span class="qty-plus">+</span>
-          </div>
-        </div>
-        <div class="qty-row" data-qty="100g" data-price="€480">
-          <span class="qty-grammi">100g</span>
-          <div class="qty-right">
-            <span class="qty-prezzo">€480 <span>(4,8€/g)</span></span>
-            <span class="qty-plus">+</span>
-          </div>
-        </div>
-        <div class="qty-row" data-qty="250g" data-price="€1100">
-          <span class="qty-grammi">250g</span>
-          <div class="qty-right">
-            <span class="qty-prezzo">€1100 <span>(4,4€/g)</span></span>
-            <span class="qty-plus">+</span>
-          </div>
-        </div>
-      </div>
+      <div class="qty-list" id="qtyList"></div>
 
       <button class="ask-qty-btn" id="askOtherQtyBtn">ASK FOR ANOTHER QUANTITY</button>
 
@@ -993,7 +938,7 @@
       </a>
     </section>
 
-    <!-- T.O.S (senza sezione Escrow) -->
+    <!-- T.O.S -->
     <section id="view-tos" class="view">
       <div class="page-header">
         <h1>Termini di Servizio</h1>
@@ -1050,13 +995,16 @@
         <div class="rating-bars" id="ratingBars"></div>
       </div>
 
-      <button class="btn-primary" id="openReviewModal">+ Nuova recensione</button>
+      <button class="btn-primary" id="openReviewModalBtn">+ Nuova recensione</button>
+      <div class="verified-notice" id="verifiedReviewNotice">
+        Recensioni accettate solo con acquisti verificati.
+      </div>
 
       <div class="section-label">Recensioni</div>
       <div id="reviewsList"></div>
     </section>
 
-    <!-- CONTATTI -->
+    <!-- CONTATTI (solo Telegram) -->
     <section id="view-contacts" class="view">
       <div class="page-header">
         <h1>Contatti</h1>
@@ -1069,14 +1017,6 @@
             <a class="contact-value" href="https://t.me/Pitoneaustrale" target="_blank" rel="noopener">@Pitoneaustrale</a>
           </div>
           <button class="copy-btn" data-copy="@Pitoneaustrale">Copia</button>
-        </div>
-
-        <div class="contact-row">
-          <div>
-            <div class="contact-label">Telefono</div>
-            <a class="contact-value" href="tel:+254793619178">+254 793 619 178</a>
-          </div>
-          <button class="copy-btn" data-copy="+254 793 619 178">Copia</button>
         </div>
       </div>
     </section>
@@ -1102,46 +1042,6 @@
     </nav>
   </div>
 
-  <!-- Modale Nuova Recensione -->
-  <div class="modal-backdrop" id="reviewModal">
-    <div class="modal">
-      <h3>Nuova recensione</h3>
-      <div>
-        <label for="revAuthor">Nome o @username</label>
-        <input type="text" id="revAuthor" placeholder="Anonimo" />
-      </div>
-      <div>
-        <label for="revProduct">Prodotto</label>
-        <select id="revProduct">
-          <option value="Frozen">Frozen</option>
-          <option value="Dry">Dry</option>
-          <option value="Apple fritter">Apple fritter</option>
-          <option value="Gummy bearz">Gummy bearz</option>
-          <option value="Purple gelato">Purple gelato</option>
-          <option value="Svapo">Svapo</option>
-        </select>
-      </div>
-      <div>
-        <label for="revStars">Valutazione</label>
-        <select id="revStars">
-          <option value="5">★★★★★ (5)</option>
-          <option value="4">★★★★☆ (4)</option>
-          <option value="3">★★★☆☆ (3)</option>
-          <option value="2">★★☆☆☆ (2)</option>
-          <option value="1">★☆☆☆☆ (1)</option>
-        </select>
-      </div>
-      <div>
-        <label for="revText">Commento</label>
-        <textarea id="revText" rows="3" placeholder="Scrivi la tua esperienza..."></textarea>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" id="closeReviewModal">Annulla</button>
-        <button class="btn-primary" id="saveReviewBtn" style="width:auto;margin:0;">Pubblica</button>
-      </div>
-    </div>
-  </div>
-
   <div class="toast" id="toast"></div>
 
   <script>
@@ -1165,56 +1065,162 @@
 
     enforceSilentVideo(document.getElementById("headerLogo")?.querySelector("video"));
 
+    // Listini di riferimento
+    const WEED_BASE_TIERS = [
+      { qty: "10g", price: "€80", unit: "8€/g" },
+      { qty: "25g", price: "€150", unit: "6€/g" },
+      { qty: "50g", price: "€280", unit: "5,6€/g" },
+      { qty: "100g", price: "€480", unit: "4,8€/g" },
+      { qty: "250g", price: "€1100", unit: "4,4€/g" }
+    ];
+
+    const WEED_LOWER_TIERS = [
+      { qty: "10g", price: "€75", unit: "7,5€/g" },
+      { qty: "25g", price: "€140", unit: "5,6€/g" },
+      { qty: "50g", price: "€260", unit: "5,2€/g" },
+      { qty: "100g", price: "€450", unit: "4,5€/g" },
+      { qty: "250g", price: "€1020", unit: "4,08€/g" }
+    ];
+
+    const WEED_LOWEST_TIERS = [
+      { qty: "10g", price: "€70", unit: "7€/g" },
+      { qty: "25g", price: "€130", unit: "5,2€/g" },
+      { qty: "50g", price: "€240", unit: "4,8€/g" },
+      { qty: "100g", price: "€410", unit: "4,1€/g" },
+      { qty: "250g", price: "€930", unit: "3,72€/g" }
+    ];
+
+    // Listino HASH come da foto
+    const HASH_PHOTO_TIERS = [
+      { qty: "25g", price: "€120", unit: "4,8€/g" },
+      { qty: "50g", price: "€200", unit: "4€/g" },
+      { qty: "100g", price: "€380", unit: "3,8€/g" },
+      { qty: "200g", price: "€700", unit: "3,5€/g" },
+      { qty: "500g", price: "€1500", unit: "3€/g" },
+      { qty: "1kg", price: "€2750", unit: "2,75€/g" }
+    ];
+
+    // Listino HASH superiore a quello in foto
+    const HASH_HIGHER_TIERS = [
+      { qty: "25g", price: "€160", unit: "6,4€/g" },
+      { qty: "50g", price: "€280", unit: "5,6€/g" },
+      { qty: "100g", price: "€520", unit: "5,2€/g" },
+      { qty: "200g", price: "€960", unit: "4,8€/g" },
+      { qty: "500g", price: "€2100", unit: "4,2€/g" },
+      { qty: "1kg", price: "€3850", unit: "3,85€/g" }
+    ];
+
+    const VAPE_TIERS = [
+      { qty: "1pz", price: "€40", unit: "40€/pz" },
+      { qty: "3pz", price: "€110", unit: "36,6€/pz" },
+      { qty: "5pz", price: "€175", unit: "35€/pz" },
+      { qty: "10pz", price: "€320", unit: "32€/pz" }
+    ];
+
     const ITEMS = [
+      // WEED (visibili in Weed e Tutti)
       {
-        id: "wd1",
-        title: "WD1",
+        id: "tropicana-cherry",
+        title: "TROPICANA CHERRY",
         category: "weed",
         badge: "WEED",
+        outOfStock: false,
         priceLabel: "A partire da €80",
         desc: "Terpene fresco e intenso",
-        mediaType: "video",
-        src: "new_APP_media/wd1.mov"
+        src: "new_APP_media/wd1.mov",
+        tiers: WEED_BASE_TIERS
       },
       {
-        id: "wd2",
-        title: "WD2",
+        id: "gummy-bearz",
+        title: "GUMMY BEARZ",
         category: "weed",
         badge: "WEED",
+        outOfStock: false,
         priceLabel: "A partire da €80",
-        desc: "Terpene fresco e intenso",
-        mediaType: "video",
-        src: "new_APP_media/wd2.mov"
+        desc: "Profilo dolce e intenso",
+        src: "new_APP_media/wd2.mov",
+        tiers: WEED_BASE_TIERS
       },
       {
-        id: "wd3",
-        title: "WD3",
+        id: "apple-fritter",
+        title: "APPLE FRITTER",
         category: "weed",
         badge: "WEED",
-        priceLabel: "A partire da €80",
-        desc: "Terpene fresco e intenso",
-        mediaType: "video",
-        src: "new_APP_media/wd3.mov"
+        outOfStock: false,
+        priceLabel: "A partire da €75",
+        desc: "Aroma fruttato e avvolgente",
+        src: "new_APP_media/wd3.mov",
+        tiers: WEED_LOWER_TIERS
       },
       {
-        id: "hash-dry",
-        title: "Dry Selection",
+        id: "tropicana-boof",
+        title: "TROPICANA BOOF",
+        category: "weed",
+        badge: "WEED",
+        outOfStock: false,
+        priceLabel: "A partire da €70",
+        desc: "Selezione agrumata e intensa",
+        src: "new_APP_media/copy_01D7AB4F-3202-4A16-9220-8C8211D90D67.mov",
+        tiers: WEED_LOWEST_TIERS
+      },
+      {
+        id: "cherry-oos",
+        title: "CHERRY",
+        category: "weed",
+        badge: "WEED",
+        outOfStock: true,
+        priceLabel: "OUT OF STOCK",
+        desc: "Attualmente non disponibile",
+        src: "new_APP_media/copy_9BA812FA-D60B-4091-896D-BF306F1F5223.mov",
+        tiers: WEED_BASE_TIERS
+      },
+
+      // HASH (visibili in Hash e Tutti)
+      {
+        id: "dry-nevilles-2026",
+        title: "DRY NEVILLE'S 2026",
         category: "hash",
         badge: "HASH",
-        priceLabel: "A partire da €80",
-        desc: "Lavorazione pulita e profilo intenso",
-        mediaType: "image",
-        src: "https://placehold.co/600x450/181c24/f3f5f8?text=Dry+Selection"
+        outOfStock: false,
+        priceLabel: "A partire da €120",
+        desc: "Dry lavorato e costante",
+        src: "new_APP_media/copy_655EF27A-B411-4087-A56D-0D09CB3CA7B0.mov",
+        tiers: HASH_PHOTO_TIERS
       },
       {
-        id: "vape-pen",
-        title: "Vape Cartridge",
+        id: "frozen-sift-90u",
+        title: "FROZEN SIFT 90U",
+        category: "hash",
+        badge: "HASH",
+        outOfStock: false,
+        priceLabel: "A partire da €160",
+        desc: "Setacciatura 90u ad alta resa",
+        src: "new_APP_media/frozen90u.mov",
+        tiers: HASH_HIGHER_TIERS
+      },
+      {
+        id: "dry-panucci-farmz",
+        title: "DRY PANUCCI FARMZ",
+        category: "hash",
+        badge: "HASH",
+        outOfStock: true,
+        priceLabel: "OUT OF STOCK",
+        desc: "Attualmente non disponibile",
+        src: "new_APP_media/dry_panuccifarm.mov",
+        tiers: HASH_PHOTO_TIERS
+      },
+
+      // VAPE (visibili in Vape e Tutti)
+      {
+        id: "vape-big-ripper",
+        title: 'VAPE THC "BIG RIPPER" 1G',
         category: "vape",
         badge: "VAPE",
-        priceLabel: "A partire da €80",
-        desc: "Tiro fluido e formato compatto",
-        mediaType: "image",
-        src: "https://placehold.co/600x450/181c24/f3f5f8?text=Vape+Cartridge"
+        outOfStock: false,
+        priceLabel: "A partire da €40",
+        desc: "Cartuccia 1G pronta all'uso",
+        src: "new_APP_media/copy_4D52DF26-A548-492D-8AB2-85EF70280FF8.mov",
+        tiers: VAPE_TIERS
       }
     ];
 
@@ -1344,19 +1350,19 @@
       const list = filter === "all" ? ITEMS : ITEMS.filter((item) => item.category === filter);
 
       productsGrid.innerHTML = list.map((item) => {
-        const mediaHtml = item.mediaType === "video"
-          ? `<video src="${item.src}" autoplay loop muted playsinline preload="metadata"></video>`
-          : `<img src="${item.src}" alt="${item.title}" loading="lazy" />`;
+        const oosTag = item.outOfStock ? `<span class="oos-ribbon">OUT OF STOCK</span>` : "";
+        const priceClass = item.outOfStock ? "product-price oos-text" : "product-price";
 
         return `
-          <article class="product-card" data-id="${item.id}">
+          <article class="product-card ${item.outOfStock ? "oos" : ""}" data-id="${item.id}">
             <div class="media-box">
-              ${mediaHtml}
+              <video src="${item.src}" autoplay loop muted playsinline preload="metadata"></video>
               <span class="badge-tag">${item.badge}</span>
+              ${oosTag}
             </div>
             <div class="product-body">
               <div class="product-title">${item.title}</div>
-              <div class="product-price">${item.priceLabel}</div>
+              <div class="${priceClass}">${item.priceLabel}</div>
             </div>
           </article>
         `;
@@ -1368,11 +1374,7 @@
         card.addEventListener("click", () => {
           const item = ITEMS.find((x) => x.id === card.dataset.id);
           if (!item) return;
-          if (item.mediaType === "video") {
-            openVideoDetail(item);
-          } else {
-            showToast(`${item.title} — ${item.priceLabel}`);
-          }
+          openVideoDetail(item);
         });
       });
     }
@@ -1386,28 +1388,57 @@
     });
 
     const detailBadge = document.getElementById("detailBadge");
+    const detailOosBadge = document.getElementById("detailOosBadge");
     const detailTitle = document.getElementById("detailTitle");
+    const detailFrom = document.getElementById("detailFrom");
     const detailDesc = document.getElementById("detailDesc");
+    const qtyList = document.getElementById("qtyList");
     const detailContactBtn = document.getElementById("detailContactBtn");
-    const qtyRows = document.querySelectorAll(".qty-row");
 
-    let activeVideoItem = null;
-    let selectedQty = { qty: "10g", price: "€80" };
+    let activeItem = null;
+    let selectedTier = null;
 
     function updateContactLink() {
-      const title = activeVideoItem ? activeVideoItem.title : "Prodotto";
-      const msg = encodeURIComponent(`Ciao @Pitoneaustrale, info per ${title} (${selectedQty.qty} - ${selectedQty.price})`);
+      if (!activeItem) return;
+      const suffix = selectedTier ? ` (${selectedTier.qty} - ${selectedTier.price})` : "";
+      const msg = encodeURIComponent(`Ciao @Pitoneaustrale, info per ${activeItem.title}${suffix}`);
       detailContactBtn.href = `https://t.me/Pitoneaustrale?text=${msg}`;
     }
 
-    function openVideoDetail(item) {
-      activeVideoItem = item;
-      selectedQty = { qty: "10g", price: "€80" };
+    function renderQtyRows(tiers) {
+      selectedTier = tiers[0] || null;
+      qtyList.innerHTML = tiers.map((t, idx) => `
+        <div class="qty-row ${idx === 0 ? "selected" : ""}" data-qty="${t.qty}" data-price="${t.price}">
+          <span class="qty-grammi">${t.qty}</span>
+          <div class="qty-right">
+            <span class="qty-prezzo">${t.price} <span>(${t.unit})</span></span>
+            <span class="qty-plus">+</span>
+          </div>
+        </div>
+      `).join("");
 
-      qtyRows.forEach((r, idx) => r.classList.toggle("selected", idx === 0));
+      qtyList.querySelectorAll(".qty-row").forEach((row) => {
+        row.addEventListener("click", () => {
+          qtyList.querySelectorAll(".qty-row").forEach((r) => r.classList.remove("selected"));
+          row.classList.add("selected");
+          selectedTier = { qty: row.dataset.qty, price: row.dataset.price };
+          updateContactLink();
+          showToast(`Selezionato ${selectedTier.qty} (${selectedTier.price})`);
+        });
+      });
+    }
+
+    function openVideoDetail(item) {
+      activeItem = item;
       detailBadge.textContent = item.badge;
+      detailOosBadge.style.display = item.outOfStock ? "inline-block" : "none";
       detailTitle.textContent = item.title;
+      detailFrom.innerHTML = item.outOfStock
+        ? `Stato: <strong style="color:#fca5a5;">OUT OF STOCK</strong>`
+        : `Prezzo: <strong>${item.priceLabel}</strong>`;
       detailDesc.textContent = item.desc;
+
+      renderQtyRows(item.tiers);
 
       detailVideo.src = item.src;
       detailVideo.muted = true;
@@ -1423,18 +1454,8 @@
       showView("home");
     });
 
-    qtyRows.forEach((row) => {
-      row.addEventListener("click", () => {
-        qtyRows.forEach((r) => r.classList.remove("selected"));
-        row.classList.add("selected");
-        selectedQty = { qty: row.dataset.qty, price: row.dataset.price };
-        updateContactLink();
-        showToast(`Selezionato ${selectedQty.qty} (${selectedQty.price})`);
-      });
-    });
-
     document.getElementById("askOtherQtyBtn").addEventListener("click", () => {
-      const title = activeVideoItem ? activeVideoItem.title : "Prodotto";
+      const title = activeItem ? activeItem.title : "Prodotto";
       const msg = encodeURIComponent(`Ciao @Pitoneaustrale, vorrei chiedere un'altra quantità per ${title}`);
       window.open(`https://t.me/Pitoneaustrale?text=${msg}`, "_blank", "noopener");
     });
@@ -1479,44 +1500,17 @@
       `).join("");
     }
 
-    const modal = document.getElementById("reviewModal");
-    document.getElementById("openReviewModal").addEventListener("click", () => modal.classList.add("open"));
-    document.getElementById("closeReviewModal").addEventListener("click", () => modal.classList.remove("open"));
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) modal.classList.remove("open");
-    });
-
-    document.getElementById("saveReviewBtn").addEventListener("click", () => {
-      const author = document.getElementById("revAuthor").value.trim() || "Anonimo";
-      const product = document.getElementById("revProduct").value;
-      const stars = parseInt(document.getElementById("revStars").value, 10);
-      const text = document.getElementById("revText").value.trim();
-
-      if (!text) {
-        showToast("Scrivi un commento prima di pubblicare");
-        return;
-      }
-
-      REVIEWS.unshift({
-        author,
-        stars,
-        products: [product],
-        text,
-        date: "Oggi"
-      });
-
-      document.getElementById("revAuthor").value = "";
-      document.getElementById("revText").value = "";
-      modal.classList.remove("open");
-      renderReviews();
-      showToast("Recensione aggiunta");
+    const verifiedNotice = document.getElementById("verifiedReviewNotice");
+    document.getElementById("openReviewModalBtn").addEventListener("click", () => {
+      verifiedNotice.classList.add("show");
+      showToast("Recensioni accettate solo con acquisti verificati.");
     });
 
     const toast = document.getElementById("toast");
     function showToast(msg) {
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1800);
+      setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
     document.querySelectorAll(".copy-btn").forEach((btn) => {
