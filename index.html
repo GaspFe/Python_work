@@ -36,7 +36,7 @@
       line-height: 1.45;
     }
 
-    /* Sfondo python_logo.jpg fisso su PC e telefono, zoomato sulla faccia del serpente */
+    /* Sfondo python_logo.jpg fisso su PC e telefono, centrato sopra al centro */
     .bg-fixed {
       position: fixed;
       inset: 0;
@@ -59,10 +59,10 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(8, 10, 14, 0.58);
+      background: rgba(8, 10, 14, 0.52);
     }
 
-    /* Colonna app scura compatta stile screenshot */
+    /* Colonna app scura centrata su desktop */
     .app-shell {
       position: relative;
       z-index: 1;
@@ -289,16 +289,15 @@
       margin-top: auto;
     }
 
-    /* Schermata Dettaglio Video stile immagine */
+    /* Schermata Dettaglio Video stile foto (senza pulsanti pausa/full screen) */
     .detail-overlay {
       display: none;
       position: fixed;
       inset: 0;
       z-index: 40;
-      background: rgba(8, 10, 14, 0.88);
-      backdrop-filter: blur(8px);
+      background: transparent;
       overflow-y: auto;
-      padding: 0 0 88px;
+      padding: 0 0 84px;
     }
 
     .detail-overlay.open {
@@ -313,7 +312,7 @@
       background: var(--bg-surface);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
-      padding: 14px 16px 24px;
+      padding: 14px 16px 28px;
     }
 
     @media (max-width: 520px) {
@@ -338,9 +337,10 @@
       margin-bottom: 14px;
     }
 
+    /* Video grande in alto, adattato sia su desktop che su telefono */
     .detail-video-frame {
       width: 100%;
-      max-width: 310px;
+      max-width: 360px;
       margin: 0 auto 16px;
       border-radius: var(--radius-md);
       overflow: hidden;
@@ -350,39 +350,23 @@
 
     .detail-video-frame video {
       width: 100%;
-      aspect-ratio: 3 / 4;
-      max-height: 54dvh;
+      aspect-ratio: 9 / 14;
+      max-height: 62dvh;
       object-fit: cover;
       display: block;
       background: #06080c;
+      pointer-events: none;
     }
 
-    .silent-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      background: rgba(13, 16, 22, 0.96);
-      border-top: 1px solid var(--border);
-    }
+    @media (max-width: 520px) {
+      .detail-video-frame {
+        max-width: 100%;
+      }
 
-    .ctrl-btn {
-      border: 1px solid var(--border);
-      background: var(--bg-card-2);
-      color: #ffffff;
-      border-radius: 8px;
-      padding: 5px 9px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    .seek-bar {
-      flex: 1;
-      accent-color: var(--accent);
-      cursor: pointer;
-      min-width: 0;
+      .detail-video-frame video {
+        aspect-ratio: 3 / 4;
+        max-height: 58dvh;
+      }
     }
 
     .detail-badges {
@@ -424,10 +408,7 @@
     }
 
     .detail-desc {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+      font-size: 12px;
       color: var(--text-muted);
       margin-bottom: 16px;
     }
@@ -805,7 +786,7 @@
       cursor: pointer;
     }
 
-    /* Bottom Nav (4 sezioni, senza Carrello) */
+    /* Bottom Nav */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -1058,7 +1039,7 @@
       </div>
     </section>
 
-    <!-- Bottom Nav (4 sezioni) -->
+    <!-- Bottom Nav -->
     <nav class="bottom-nav">
       <button class="nav-btn active" data-view="home">
         <span>🏠</span>
@@ -1079,18 +1060,13 @@
     </nav>
   </div>
 
-  <!-- Dettaglio Video stile immagine (senza audio, con Full Screen) -->
+  <!-- Schermata Dettaglio Video stile foto -->
   <div class="detail-overlay" id="detailOverlay" aria-hidden="true">
     <div class="detail-shell">
       <button class="back-circle-btn" id="closeDetailBtn" title="Indietro">←</button>
 
       <div class="detail-video-frame" id="detailVideoBox">
         <video id="detailVideo" autoplay loop muted playsinline preload="metadata"></video>
-        <div class="silent-controls">
-          <button class="ctrl-btn" id="togglePlayBtn">Pausa</button>
-          <input type="range" id="seekBar" class="seek-bar" min="0" max="100" value="0" step="0.1" aria-label="Avanzamento video" />
-          <button class="ctrl-btn" id="fullscreenBtn">Full Screen</button>
-        </div>
       </div>
 
       <div class="detail-badges">
@@ -1099,7 +1075,7 @@
 
       <div class="detail-title" id="detailTitle">WD1</div>
       <div class="detail-from">Prezzo: <strong>A partire da €80</strong></div>
-      <div class="detail-desc" id="detailDesc">TERPENE FRESCO E INTENSO</div>
+      <div class="detail-desc" id="detailDesc">Terpene fresco e intenso</div>
 
       <div class="shipping-banner">🇮🇹 SPEDIZIONE DA ITALIA</div>
 
@@ -1202,6 +1178,7 @@
       videoEl.muted = true;
       videoEl.defaultMuted = true;
       videoEl.volume = 0;
+      videoEl.controls = false;
       videoEl.removeAttribute("controls");
       videoEl.addEventListener("volumechange", () => {
         if (!videoEl.muted) videoEl.muted = true;
@@ -1218,7 +1195,7 @@
         category: "weed",
         badge: "WEED",
         priceLabel: "A partire da €80",
-        desc: "TERPENE FRESCO E INTENSO",
+        desc: "Terpene fresco e intenso",
         mediaType: "video",
         src: "new_APP_media/wd1.mov"
       },
@@ -1228,7 +1205,7 @@
         category: "weed",
         badge: "WEED",
         priceLabel: "A partire da €80",
-        desc: "TERPENE FRESCO E INTENSO",
+        desc: "Terpene fresco e intenso",
         mediaType: "video",
         src: "new_APP_media/wd2.mov"
       },
@@ -1238,7 +1215,7 @@
         category: "weed",
         badge: "WEED",
         priceLabel: "A partire da €80",
-        desc: "TERPENE FRESCO E INTENSO",
+        desc: "Terpene fresco e intenso",
         mediaType: "video",
         src: "new_APP_media/wd3.mov"
       },
@@ -1248,7 +1225,7 @@
         category: "hash",
         badge: "HASH",
         priceLabel: "A partire da €80",
-        desc: "LAVORAZIONE PULITA E INTENSA",
+        desc: "Lavorazione pulita e profilo intenso",
         mediaType: "image",
         src: "https://placehold.co/600x450/181c24/f3f5f8?text=Dry+Selection"
       },
@@ -1258,7 +1235,7 @@
         category: "vape",
         badge: "VAPE",
         priceLabel: "A partire da €80",
-        desc: "TIRO FLUIDO E COMPATTO",
+        desc: "Tiro fluido e formato compatto",
         mediaType: "image",
         src: "https://placehold.co/600x450/181c24/f3f5f8?text=Vape+Cartridge"
       }
@@ -1337,7 +1314,6 @@
       }
     ];
 
-    // Navigazione
     const navButtons = document.querySelectorAll(".nav-btn");
     const views = document.querySelectorAll(".view");
     const detailOverlay = document.getElementById("detailOverlay");
@@ -1352,7 +1328,6 @@
       });
     });
 
-    // Render Griglia Home
     const productsGrid = document.getElementById("productsGrid");
     const categoryChips = document.querySelectorAll(".chip");
     let currentFilter = "all";
@@ -1403,12 +1378,7 @@
       });
     });
 
-    // Dettaglio Video + Quantità & Prezzi + Full Screen
     const detailVideo = document.getElementById("detailVideo");
-    const detailVideoBox = document.getElementById("detailVideoBox");
-    const togglePlayBtn = document.getElementById("togglePlayBtn");
-    const seekBar = document.getElementById("seekBar");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
     const detailBadge = document.getElementById("detailBadge");
     const detailTitle = document.getElementById("detailTitle");
     const detailDesc = document.getElementById("detailDesc");
@@ -1439,8 +1409,6 @@
       detailVideo.muted = true;
       detailVideo.volume = 0;
       detailVideo.currentTime = 0;
-      seekBar.value = 0;
-      togglePlayBtn.textContent = "Pausa";
 
       updateContactLink();
       detailOverlay.classList.add("open");
@@ -1461,46 +1429,6 @@
 
     document.getElementById("closeDetailBtn").addEventListener("click", closeDetailView);
 
-    togglePlayBtn.addEventListener("click", () => {
-      if (detailVideo.paused) {
-        detailVideo.muted = true;
-        detailVideo.volume = 0;
-        detailVideo.play().catch(() => {});
-        togglePlayBtn.textContent = "Pausa";
-      } else {
-        detailVideo.pause();
-        togglePlayBtn.textContent = "Play";
-      }
-    });
-
-    detailVideo.addEventListener("timeupdate", () => {
-      if (!detailVideo.duration || Number.isNaN(detailVideo.duration)) return;
-      seekBar.value = ((detailVideo.currentTime / detailVideo.duration) * 100).toFixed(1);
-    });
-
-    seekBar.addEventListener("input", () => {
-      if (!detailVideo.duration || Number.isNaN(detailVideo.duration)) return;
-      detailVideo.currentTime = (seekBar.value / 100) * detailVideo.duration;
-    });
-
-    fullscreenBtn.addEventListener("click", async () => {
-      detailVideo.muted = true;
-      detailVideo.volume = 0;
-      try {
-        if (document.fullscreenElement) {
-          await document.exitFullscreen();
-        } else if (detailVideo.requestFullscreen) {
-          await detailVideo.requestFullscreen();
-        } else if (detailVideo.webkitEnterFullscreen) {
-          detailVideo.webkitEnterFullscreen();
-        } else if (detailVideoBox.requestFullscreen) {
-          await detailVideoBox.requestFullscreen();
-        }
-      } catch (err) {
-        showToast("Full screen non supportato su questo dispositivo");
-      }
-    });
-
     qtyRows.forEach((row) => {
       row.addEventListener("click", () => {
         qtyRows.forEach((r) => r.classList.remove("selected"));
@@ -1517,7 +1445,6 @@
       window.open(`https://t.me/Pitoneaustrale?text=${msg}`, "_blank", "noopener");
     });
 
-    // Render Recensioni
     const reviewsList = document.getElementById("reviewsList");
     const ratingBars = document.getElementById("ratingBars");
     const avgRatingEl = document.getElementById("avgRating");
@@ -1558,7 +1485,6 @@
       `).join("");
     }
 
-    // Modale Nuova Recensione
     const modal = document.getElementById("reviewModal");
     document.getElementById("openReviewModal").addEventListener("click", () => modal.classList.add("open"));
     document.getElementById("closeReviewModal").addEventListener("click", () => modal.classList.remove("open"));
@@ -1592,7 +1518,6 @@
       showToast("Recensione aggiunta");
     });
 
-    // Copia contatti
     const toast = document.getElementById("toast");
     function showToast(msg) {
       toast.textContent = msg;
